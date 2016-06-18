@@ -1,0 +1,4 @@
+.tags*
+/node_modules
+/frontend.js
+/bower_components

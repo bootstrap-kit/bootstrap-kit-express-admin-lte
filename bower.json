@@ -1,0 +1,22 @@
+{
+  "name": "bootstrap-kit-express-adminlte",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Kay-Uwe <kiwi@franka.dyndns.org> (Kiwi)"
+  ],
+  "license": "propriety",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "AdminLTE": "adminlte#^2.3.3",
+    "jquery-ui": "^1.11.4",
+    "webcomponentsjs": "^0.7.22"
+  }
+}
