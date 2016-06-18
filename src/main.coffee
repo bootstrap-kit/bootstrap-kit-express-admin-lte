@@ -39,9 +39,9 @@ module.exports =
       res.status(200).render('app')
 
     # for jquery, jquery-ui, etc
-    app.use(express.static(path.resolve(__dirname, '..', 'bower_components')))
+    app.use(express.static(path.resolve(__dirname, '..', 'node_modules')))
 
     # for bootstrap
-    app.use(express.static(path.resolve(__dirname, '..', 'bower_components', 'AdminLTE')))
+    app.use(express.static(path.resolve(__dirname, '..', 'node_modules', 'admin-lte')))
 
   frontend: path.resolve __dirname, "frontend.coffee"
