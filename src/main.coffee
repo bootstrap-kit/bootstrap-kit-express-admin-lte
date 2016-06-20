@@ -19,15 +19,15 @@ module.exports =
     #   app.locals.context = {app.locals.lteScripts}
 
     exphbrs.ExpressHandlebars::_renderTemplate = (template, context, options) ->
-      context.lteApps = app.locals.apps
+      #context.lteApps = app.locals.apps
       context.baseURL = 'http://localhost:3001'
 
       if app.locals.context
         for key,value of app.locals.context
           context[key] = value
 
-      context.lteScripts = app.locals.lteScripts
-      context.lteStyles  = app.locals.lteStyles
+      #context.lteScripts = app.locals.lteScripts
+      #context.lteStyles  = app.locals.lteStyles
       context.assets     = context.baseURL
 
       template(context, options)
@@ -38,10 +38,22 @@ module.exports =
     app.get '/', (req, res) ->
       res.status(200).render('app')
 
+    getModuleDir = (mod) ->
+      require.resolve(mod).match(/^(.*\/node_modules\/[^\/]+)/)[1]
+
+    admin_lte_dir = getModuleDir('admin-lte')
+
     # for jquery, jquery-ui, etc
-    app.use(express.static(path.resolve(__dirname, '..', 'node_modules')))
+    pkgdirs = []
+    for mod in [ 'jquery', 'jquery-ui-bundle', 'webcomponents.js', 'admin-lte',
+      'moment', 'raphael' ]
+      dir = path.resolve(getModuleDir(mod), '..')
+      pkgdirs.push(dir) if dir not in pkgdirs
+
+    for dir in pkgdirs
+      app.use(express.static(dir))
 
     # for bootstrap
-    app.use(express.static(path.resolve(__dirname, '..', 'node_modules', 'admin-lte')))
+    app.use(express.static(admin_lte_dir))
 
   frontend: path.resolve __dirname, "frontend.coffee"
