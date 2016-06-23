@@ -3,6 +3,9 @@ module.exports =
     @bootstrapKit = app.bootstrapKit
     {SidebarMenu, WebComponent, Pane} = @bootstrapKit
 
+    # AdminLTE-specific Components
+    @bootstrapKit.InfoBox = InfoBox = require('./info-box')(@bootstrapKit)
+
     @sideBarMenu = new SidebarMenu
       view: '.main-sidebar > section.sidebar > ul.sidebar-menu'
 
@@ -10,6 +13,9 @@ module.exports =
 
     @contentPane = new Pane
       view: '.content-wrapper > section.content'
+      contentHeader: document.querySelector '.content-wrapper > section.content-header'
+
+    @contentPane.manageComponentViews document.querySelector '.content-wrapper > section.content'
 
     @bootstrapKit.addPane('content', @contentPane)
 
@@ -33,6 +39,19 @@ module.exports =
         @bootstrapKit.trigger(document.location.hash[1...])
 
   attachMenuToPane: (pane, menu) ->
+    pane.onDidActiveItemChange ({oldItem, newItem}) ->
+      debugger
+      oldItem?.menuItem?.getView().classList.remove('active')
+      newItem?.menuItem?.getView().classList.add('active')
+
+      if pane.options?.contentHeader
+        contentHeader = ''
+        if newItem.options?.title
+          contentHeader = newItem.options?.title
+        if newItem.options?.subtle
+          contentHeader += " <small>#{newItem.options.subtle}</small>"
+        pane.options.contentHeader.innerHTML = "<h1>#{contentHeader}</h1>"
+
     pane.observeComponents (component, makeMenuItemView) =>
 
       makeView = makeMenuItemView or =>
@@ -42,16 +61,13 @@ module.exports =
         @bootstrapKit.addTrigger name, ->
           current = pane.activateItem component
 
-
         """<a href="##{name}">#{title}</a>"""
 
       menuItem = new @bootstrapKit.MenuItem makeView(), ->
         current = pane.activateItem component
 
-      pane.onDidActiveItemChange ({oldItem, newItem}) ->
-        debugger
-        oldItem?.menuItem.getView().classList.remove('active')
-        newItem.menuItem.getView().classList.add('active')
+      if component is pane.activeItem
+        menuItem.getView().classList.add('active')
 
       menu.addComponent menuItem
       component.menuItem = menuItem
