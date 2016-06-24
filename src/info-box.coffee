@@ -41,7 +41,7 @@ module.exports = (bootstrapKit) ->
 
       iconCode = ''
       if @model.options?.icon?.match /^https?:\/\//
-        iconCode = """<img src="#{@model.options.icon}">"""
+        iconCode = """<img src="#{@model.options.icon}">&nbsp;"""  # nbsp for getting img into the vertical middle
       else if m = @model.options?.icon?.match /^(\w+)\-/
         iconCode = """<i class="#{m[1]} #{@model.options.icon}"></i>"""
 
